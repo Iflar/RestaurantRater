@@ -78,12 +78,31 @@ namespace RestaurantRater.Controllers
                 return NotFound();
 
             restaurant.Name = updatedRestaurant.Name;
-            restaurant.Rating = updatedRestaurant.Rating;
+           
             restaurant.Address = updatedRestaurant.Address;
 
             await _context.SaveChangesAsync();
 
             return Ok("Restaurant Updated.");
+        }
+
+        //DELETE (Delete)
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteRestaurant([FromUri] int id)
+        {
+            Restaurant restaurant = await _context.Restaurants.FindAsync(id);
+
+            if (restaurant is null)
+                return NotFound();
+
+            _context.Restaurants.Remove(restaurant);
+
+            if (await _context.SaveChangesAsync() == 1)
+            {
+                return Ok("Restaurant deleted");
+            }
+
+            return InternalServerError();
         }
     }
 }
