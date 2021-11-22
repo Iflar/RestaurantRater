@@ -38,15 +38,18 @@ namespace RestaurantRater.Controllers
 
         //Get All
         // api/Restaurant
+        [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
             List<Restaurant> restaurants = await _context.Restaurants.ToListAsync();
             return Ok(restaurants);
+
         }
 
         //Get By ID
         // api/Restaurant/{id}
-        public async Task<IHttpActionResult> GetById([FromBody] int id)
+        [HttpGet]
+        public async Task<IHttpActionResult> GetById([FromUri] int id)
         {
             Restaurant restaurant = await _context.Restaurants.FindAsync(id);
             if (restaurant != null)
@@ -58,7 +61,8 @@ namespace RestaurantRater.Controllers
 
         //PUT (update)
         // api/Restaurant/{id}
-        public async Task<IHttpActionResult> UpdateRestaurant([FromBody] int id, [FromBody] Restaurant updatedRestaurant)
+        [HttpPut]
+        public async Task<IHttpActionResult> UpdateRestaurant([FromUri] int id, [FromBody] Restaurant updatedRestaurant)
         {
             if(id != updatedRestaurant?.Id)
             {
@@ -79,7 +83,7 @@ namespace RestaurantRater.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok("Restaurant Updated!");
+            return Ok("Restaurant Updated.");
         }
     }
 }
